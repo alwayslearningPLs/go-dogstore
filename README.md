@@ -14,7 +14,7 @@ You need to have installed [docker](https://docs.docker.com/engine/install/ubunt
 
 ## Swagger 3.0
 
-[here](./here)
+[Swagger schema](./swagger.yml)
 
 ## Uninstall
 
