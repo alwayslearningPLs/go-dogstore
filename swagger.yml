@@ -1,0 +1,656 @@
+openapi: 3.0.3
+info:
+  title: Swagger Dogstore - OpenAPI 3.0
+  description: |-
+    This is a sample Dog Store Server based on the OpenAPI 3.0 specification.  
+
+    Some useful links:
+    - [The dogstore github repository](https://github.com/MrTimeout/go-dogstore)
+  contact:
+    email: estonoesmiputocorre@gmail.com 
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080/dogstore
+tags:
+  - name: dog 
+    description: Everything about your dogs
+  - name: owner 
+    description: Owners of each dog here
+  - name: breed 
+    description: Operations about user
+paths:
+  /owners:
+    get:
+      tags:
+        - owner
+      summary: Get owners
+      operationId: getOwners
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Owner'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    post:
+      tags:
+        - owner
+      summary: Add owners
+      operationId: addOwners
+      requestBody:
+        description: Create a new owner
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Owner'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Owner'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /owners/{owner-id}:
+    get:
+      tags:
+        - owner
+      summary: Get Owner by id
+      operationId: getOwner
+      parameters:
+        - name: owner-id
+          in: path
+          description: ID of owner
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Owner'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    delete:
+      tags:
+        - owner
+      summary: Delete owner
+      operationId: deleteOwner
+      parameters:
+        - name: owner-id
+          in: path
+          description: ID of owner
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Owner'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /owners/{owner-id}/dogs:
+    get:
+      tags:
+        - owner
+      summary: Get dogs by owner and optionally by breed
+      operationId: getDogsByOwner
+      parameters:
+        - name: owner-id
+          in: path
+          description: ID of owner
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: breed
+          in: query
+          description: breed name of the dog
+          required: false 
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    post:
+      tags:
+        - owner
+      summary: Post dogs by owner and by breed
+      operationId: addDogByOwner
+      parameters:
+        - name: owner-id
+          in: path
+          description: ID of owner
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: breed
+          in: query
+          description: breed name of the dog
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Create a new dog in the store with an owner
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dog'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /owners/{owner-id}/dogs/{dog-name}:
+    get:
+      tags:
+        - owner
+      summary: Get dog by owner, optionally by breed and by dog-name
+      description: Get dog by owner, optionally by breed and by dog-name
+      operationId: getDogByOwner
+      parameters:
+        - name: owner-id
+          in: path
+          description: ID of owner
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: dog-name
+          in: path
+          description: Name of the dog
+          required: true
+          schema:
+            type: string
+        - name: breed
+          in: query
+          description: breed name of the dog
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    delete:
+      tags:
+        - owner
+      summary: Delete dog by owner, optionally by breed and by dog-name
+      operationId: deleteDogsByOwner
+      parameters:
+        - name: owner-id
+          in: path
+          description: ID of owner
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: dog-name
+          in: path
+          description: Name of the dog
+          required: true
+          schema:
+            type: string
+        - name: breed
+          in: query
+          description: breed name of the dog
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /breeds:
+    get:
+      tags:
+        - breed 
+      summary: Get breeds 
+      operationId: getBreeds
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Breed'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    post:
+      tags:
+        - breed
+      summary: Add breeds
+      operationId: addBreed
+      requestBody:
+        description: Create a new breed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Breed'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breed'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /breeds/{breed-name}:
+    get:
+      tags:
+        - breed 
+      summary: Get Breed by name
+      operationId: getBreed
+      parameters:
+        - name: breed-name
+          in: path
+          description: name of the breed
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breed'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    delete:
+      tags:
+        - breed
+      summary: Delete breed
+      operationId: deleteBreed
+      parameters:
+        - name: breed-name
+          in: path
+          description: name of the breed
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Breed'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /breeds/{breed-name}/dogs:
+    get:
+      tags:
+        - breed
+      summary: Get dogs by breed and optionally by owner
+      description: Get dogs by breed and optionally by owner
+      operationId: getDogsByBreed
+      parameters:
+        - name: breed-name
+          in: path
+          description: name of the breed
+          required: true
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: owner ID
+          required: false
+          schema:
+            type: string
+            format: uuid 
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    post:
+      tags:
+        - breed
+      summary: Add dogs by breed and by owner
+      operationId: addDogsByBreed
+      parameters:
+        - name: breed-name
+          in: path
+          description: name of the breed
+          required: true
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: owner ID
+          required: false
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Create a new dog in the store with an owner and breed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Dog'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /breeds/{breed-name}/dogs/{dog-name}:
+    get:
+      tags:
+        - breed
+      summary: Get dog by breed, optionally by owner and dog name
+      description: Get dog by breed, optionally by owner and dog name
+      operationId: dogsByBreed
+      parameters:
+        - name: breed-name
+          in: path
+          description: name of the breed
+          required: true
+          schema:
+            type: string
+        - name: dog-name
+          in: path
+          description: Name of the dog
+          required: true
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: owner ID
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+    delete:
+      tags:
+        - breed
+      summary: Delete dog by breed, optionally by owner and dog name
+      operationId: deleteDogByBreed 
+      parameters:
+        - name: breed-name
+          in: path
+          description: name of the breed
+          required: true
+          schema:
+            type: string
+        - name: dog-name
+          in: path
+          description: Name of the dog
+          required: true
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: owner ID
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /dogs:
+    get:
+      tags:
+        - dog
+      summary: Get dogs optionally by breed and owner 
+      description: Get dogs optionally by breed and owner
+      operationId: getDogs
+      parameters:
+        - name: breed
+          in: query
+          description: name of the breed
+          required: false
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: ID of the owner
+          required: false
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+  /dogs/{dog-name}:
+    get:
+      tags:
+        - dog
+      summary: Get dogs optionally by breed and owner 
+      description: Get dogs optionally by breed and owner
+      operationId: getDog
+      parameters:
+        - name: breed
+          in: query
+          description: name of the breed
+          required: false
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: ID of the owner
+          required: false
+          schema:
+            type: string
+            format: uuid
+        - name: dog-name
+          in: path
+          description: name of the dog
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dog'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrResponse'
+components:
+  schemas:
+    Dog:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Max
+        breed:
+          $ref: '#/components/schemas/Breed'
+        owner:
+          $ref: '#/components/schemas/Owner'
+    Breed:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Bulldog
+        description:
+          type: string
+          example: a dog of a sturdy smooth-haired breed with a large head and powerful protruding lower jaw, a flat wrinkled face, and a broad chest.
+    Owner:
+      type: object
+      properties:
+        owner_id:
+          type: string
+          format: uuid
+          example: eb98a8b1-7d11-48c0-b599-a4c812a0e132
+        name:
+          type: string
+          example: Diego
+        surname:
+          type: string
+          example: Gonzalez Gonzalez
+        birthday:
+          type: string 
+          format: datetime
+          example: 1996-11-01T23:00:00Z
+    ErrResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
