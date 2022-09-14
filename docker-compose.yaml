@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:14.5-alpine
+    volumes:
+    - postgre_data:/var/lib/postgresql/data
+    - ./schema.sql:/docker-entrypoint-initdb.d/10-schema.sql
+    environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=dogstore
+    - POSTGRES_PASSWORD=abc123.
+    restart: always
+  rest:
+    image: wso2-rest-api-example:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+    - "127.0.0.1:8080:8080"
+    environment:
+    - POSTGRES_PASSWORD=abc123.
+    depends_on:
+    - db
+    command: ["/wait-for-it.sh", "db:5432", "--strict", "--timeout=20", "--", "/wso2-rest-api-example"]
+volumes:
+  postgre_data:
+    name: postgre_data
+    external: false
+    driver: local
