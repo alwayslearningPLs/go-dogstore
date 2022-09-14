@@ -1,0 +1,29 @@
+@startuml dogstore
+
+hide circle
+skinparam linetype ortho
+
+entity breeds {
+  * breed_id : number <<generated>>
+  * name : text
+  * description : text
+}
+
+entity owners {
+  * owner_id : uuid <<generated>>
+  * name : text 
+  * surname : text
+  * birthday : datetime
+}
+
+entity dogs {
+  * dog_id : number <<generated>>
+  * name : text <<unique>>
+  * breed_id : number
+  * owner_id : uuid  <<unique>>
+}
+
+dogs }|--o| breeds
+dogs }|--o| owners
+
+@enduml
