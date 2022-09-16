@@ -19,3 +19,4 @@ You need to have installed [docker](https://docs.docker.com/engine/install/ubunt
 ## Uninstall
 
 `docker-compose down --volumes`
+

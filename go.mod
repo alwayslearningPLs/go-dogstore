@@ -1,4 +1,4 @@
-module github.com/MrTimeout/wso2-rest-api-example
+module github.com/MrTimeout/go-dogstore
 
 go 1.19
 
